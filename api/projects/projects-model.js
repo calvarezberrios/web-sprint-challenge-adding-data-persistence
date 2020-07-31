@@ -6,7 +6,8 @@ module.exports = {
     add,
     update,
     remove,
-    addTask
+    addTask,
+    findTasks
 }
 
 function find() {
@@ -46,7 +47,16 @@ function addTask(task) {
             .then(ids => {
                 return db("tasks")
                         .join("projects", "projects.id", "tasks.project_id")
-                        .select("tasks.id", "tasks.description", "tasks.notes", "tasks.completed", "projects.name", "projects.description", "projects.completed")
-                        .where({ id: ids[0] }).first();
+                        .select("tasks.id", "tasks.description", "tasks.notes", "tasks.completed", "projects.name as project_name", "projects.description as project_description")
+                        .where({ "tasks.id": ids[0] })
+                        .first();                        
             })
+}
+
+function findTasks(projectID) {
+    return db("tasks")
+            .join("projects", "projects.id", "tasks.project_id")
+            .select("tasks.id", "tasks.description", "tasks.notes", "tasks.completed", "projects.name as project_name", "projects.description as project_description")
+            .where({ project_id: projectID });
+            
 }

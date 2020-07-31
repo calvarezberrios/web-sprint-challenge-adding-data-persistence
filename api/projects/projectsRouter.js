@@ -1,8 +1,6 @@
 const express = require("express");
 
 const projects = require("./projects-model.js");
-const server = require("../../server.js");
-const dbConfig = require("../../data/db-config.js");
 
 const router = express.Router();
 
@@ -22,6 +20,14 @@ router.get("/:id", (req, res, next) => {
             }
         })
         .catch(() => next({ code: 500, message: "Error retrieving project data"}))
+});
+
+router.get("/:id/tasks", (req, res, next) => {
+    const { id } = req.params;
+
+    projects.findTasks(id)
+        .then(tasks => res.status(200).json(tasks))
+        .catch(() => next({ code: 500, message: "Error retrieving tasks" }));
 });
 
 router.post("/:id/tasks", (req, res, next) => {
