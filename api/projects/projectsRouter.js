@@ -30,6 +30,14 @@ router.get("/:id/tasks", (req, res, next) => {
         .catch(() => next({ code: 500, message: "Error retrieving tasks" }));
 });
 
+router.get("/:id/resources", (req, res, next) => {
+    const { id } = req.params;
+
+    projects.findResources(id)
+        .then(resources => res.status(200).json(resources))
+        .catch(() => next({ code: 500, message: "Error retrieving project resources" }));
+});
+
 router.post("/:id/tasks", (req, res, next) => {
     const { id } = req.params;
     const newTask = req.body;

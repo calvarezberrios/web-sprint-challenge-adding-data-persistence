@@ -7,7 +7,8 @@ module.exports = {
     update,
     remove,
     addTask,
-    findTasks
+    findTasks,
+    findResources
 }
 
 function find() {
@@ -59,4 +60,11 @@ function findTasks(projectID) {
             .select("tasks.id", "tasks.description", "tasks.notes", "tasks.completed", "projects.name as project_name", "projects.description as project_description")
             .where({ project_id: projectID });
             
+}
+
+function findResources(projectID) {
+    return db("project_resources")
+            .join("resources", "resources.id", "project_resources.resource_id")
+            .select("resources.*")
+            .where({ "project_resources.project_id": projectID });
 }
